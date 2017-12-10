@@ -1,5 +1,6 @@
 import cv2
 from tensorflow.python.keras.models import load_model
+import numpy as np
 
 def preprocess_input(x): #to convert pixel values to range -1 to +1
     x = x.astype('float32')
@@ -53,6 +54,15 @@ while(True):
             continue
         gray_face = preprocess_input(gray_face)
         cv2.imshow('Preprocessed_face',gray_face)    #Show Image after preprocessing
+        gray_face = np.expand_dims(gray_face, 0) # Image has only 2 Dimension, But we require 4 dimension input to our model
+        gray_face = np.expand_dims(gray_face, -1)
+        
+        emotion_prediction = emotion_classifier.predict(gray_face)
+        print(emotion_prediction)  #Show Model Prediction
+        emotion_probability = np.max(emotion_prediction)
+        print(emotion_probability) # Show Maximum Probability
+        emotion_label_arg = np.argmax(emotion_prediction)   
+        print(emotion_label_arg)
     cv2.imshow("Emovere", bgr_image)
     if cv2.waitKey(1) & 0xFF == ord('q'):
             break
