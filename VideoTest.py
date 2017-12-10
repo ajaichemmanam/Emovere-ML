@@ -1,6 +1,13 @@
 import cv2
 from tensorflow.python.keras.models import load_model
 
+def preprocess_input(x): #to convert pixel values to range -1 to +1
+    x = x.astype('float32')
+    x = x / 255.0
+    x = x - 0.5
+    x = x * 2.0
+    return x
+
 def load_haar(path):
     haar_model = cv2.CascadeClassifier(path)
     return haar_model
@@ -44,6 +51,8 @@ while(True):
             cv2.imshow('Haar_Resized',gray_face)   #Show Resized Image
         except:
             continue
+        gray_face = preprocess_input(gray_face)
+        cv2.imshow('Preprocessed_face',gray_face)    #Show Image after preprocessing
     cv2.imshow("Emovere", bgr_image)
     if cv2.waitKey(1) & 0xFF == ord('q'):
             break
