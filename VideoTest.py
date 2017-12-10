@@ -1,4 +1,5 @@
 import cv2
+from tensorflow.python.keras.models import load_model
 
 def load_haar(path):
     haar_model = cv2.CascadeClassifier(path)
@@ -16,9 +17,14 @@ face_offsets = (20, 40)
 
 # Path to model
 haar_cascade_path = 'haar/haarcascade_frontalface_default.xml'
+emotion_model_path = 'training_output/fer2013_mini_XCEPTION.94-0.66.hdf5'
 
 # load models
 face_detection = load_haar(haar_cascade_path)
+emotion_classifier = load_model(emotion_model_path, compile=False)
+
+# getting input model shapes for inference
+emotion_target_size = emotion_classifier.input_shape[1:3]
 
 # starting video streaming
 cv2.namedWindow('Emovere')
@@ -32,7 +38,12 @@ while(True):
     for face_coordinates in faces:
         x1, x2, y1, y2 = apply_offsets(face_coordinates, face_offsets)
         gray_face = gray_image[y1:y2, x1:x2]
-        cv2.imshow("HaarOutput", gray_face)
+        cv2.imshow("HaarOutput", gray_face) #Show Output of Haar
+        try:
+            gray_face = cv2.resize(gray_face, (emotion_target_size))
+            cv2.imshow('Haar_Resized',gray_face)   #Show Resized Image
+        except:
+            continue
     cv2.imshow("Emovere", bgr_image)
     if cv2.waitKey(1) & 0xFF == ord('q'):
             break
