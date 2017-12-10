@@ -175,7 +175,8 @@ for dataset_name in datasets:
     trained_models_path = base_path + dataset_name + '_myModel'
     model_names = trained_models_path + '.{epoch:02d}-{val_acc:.2f}.hdf5'
     model_checkpoint = ModelCheckpoint(model_names, 'val_loss', verbose=1, save_best_only=True)
-    callbacks = [model_checkpoint, csv_logger, early_stop, reduce_lr]
+    tbCallback= TensorBoard(log_dir='./Graph', histogram_freq=1, write_graph=True, write_images=False)
+    callbacks = [model_checkpoint, csv_logger, early_stop, reduce_lr, tbCallback]
 
     # loading dataset
     data_loader = DataManager(dataset_name, image_size=input_shape[:2])
@@ -184,7 +185,8 @@ for dataset_name in datasets:
     num_samples, num_classes = emotions.shape
     train_data, val_data = split_data(faces, emotions, validation_split)
     train_faces, train_emotions = train_data
-    model.fit_generator(data_generator.flow(train_faces, train_emotions, batch_size),
+    model.fit_generator(data_generator.flow(train_faces, train_emotions,
+                                            batch_size),
                         steps_per_epoch=len(train_faces) / batch_size,
                         epochs=num_epochs, verbose=1, callbacks=callbacks,
                         validation_data=val_data)
