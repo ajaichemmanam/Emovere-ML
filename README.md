@@ -9,11 +9,9 @@ The dataset was created using the Google image search API to search for images o
 
 Incorporating recent advancements in the neural networks, a model was implemented using Tensorflow and Keras. It is a light weight model that works in real time, so that it can be used even on hardware constrained systems.
 
-The model achieved 66% accuracy on 94th epoch with batch size 32. 
---Will Be Updated Soon--
+The model uses external methods such as HAAR Classifiers/D-Lib/Depth sensing cameras for face detection and a neural network for classification of emotions. The network will classify only if the face detectors recognise a face in the image. Therefore, the entire efficiency of the system depends on the face detector performance as well. Once detected, A state of the art comparable accuracy levels (around 66%) is achieved with the trained model on 7 different core emotions. The model was able to recognise Happy, Surprise, Neutral, Sad and Anger easily. Disgust and Contempt emotions are not found to be detected well. The reason we assume is the lack of training data for these two emotions. The model performed really well on classifying Positive Emotions, inferred from relatively high precision scores for happy and surprised. Happy has the highest precision of 84%, which may be due to higher number of samples (~7000) in the training set. Surprise has a precision of 75%, even though it had far less samples (~3000) in the training set. There must be very strong detectable signals in the surprise expression. Model performance seems weaker across negative emotions on average. Particularly,
+the emotion Fear has a low precision of 51% and Sad with 52%. The model frequently misclassified angry, fear, sad and neutral. It is most confused when predicting because these emotions are probably the least expressive (excluding crying faces). 
 
-Special Thanks & Credits to: 
+It is not efficient to classify human facial expression as only a single emotion. Our expressions are much complex and contain a mix of emotions that could be used to accurately describe a particular expression. Considering this, the top3 accuracy of the model 92% (91.864) is one of the best.
 
-Jostine Ho(https://github.com/JostineHo) 
-
-Octavio Arriaga(https://github.com/oarriaga)
+Detailed Conclusions in Report: https://drive.google.com/file/d/1VS3I8geqXuFf_yJdrgNfz8DvVUoyYhVr/view?usp=sharing
